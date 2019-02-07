@@ -1,0 +1,70 @@
+namespace org.example.mynetwork
+
+abstract transaction issueAudit {
+    --> foodBatch foodBatch
+    --> Auditor issuedby
+    --> Business issuedto
+    
+
+    
+}
+
+asset Auditing identified by auditid {
+      o String auditid
+      --> foodBatch foodBatch
+
+}
+
+asset foodBatch identified by batchid {
+    o String batchid
+    o String fooditem
+    o Double Store_Temperature
+    o String description
+    o String type
+    
+    o String quantity
+    o Certification [] certification
+    o String Remark
+// foodBatch.Auditdata.Auditdata=issueAudit.foodBatch.certification;
+    
+    --> Business Creator    
+    }
+abstract participant Business identified by id {
+  o String id
+  o String firstName
+  o String lastName
+}
+participant Auditor extends Business {
+}
+participant Grower extends Business {
+}
+participant Packer extends Business {
+}
+participant Shipper extends Business {
+}
+
+participant IOTsensor identified by iotid {
+  o String iotid
+  o String name
+  o String type
+  o String serialno
+  --> Business owner
+}
+
+
+abstract transaction ShipmentTransaction {
+  --> Shipment shipment
+}
+transaction Certification extends issueAudit {
+  o Double Temperature
+  o String Damages
+}
+transaction TemperatureReading extends ShipmentTransaction {
+  o Double centigrade
+}
+asset Shipment identified by shipmentId {
+  o String shipmentId
+    o TemperatureReading[] temperatureReadings optional
+
+
+}
